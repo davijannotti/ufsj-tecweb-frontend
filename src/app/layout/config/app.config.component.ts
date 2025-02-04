@@ -15,6 +15,19 @@ export class AppConfigComponent {
         public layoutService: LayoutService,
         public menuService: MenuService
     ) {}
+    
+    ngOnInit() {
+            // Definindo as configurações iniciais diretamente no ngOnInit
+            this.layoutService.config.update((config) => ({
+                ...config,
+                colorScheme: 'dark',  // Inicializando com o esquema de cores escuro
+                theme: 'lara-dark-teal',  // Inicializando com um tema escuro
+                scale: 12
+            }));
+    
+            // Isso garante que o tema seja atualizado imediatamente
+            this.layoutService.changeTheme();
+        }
 
     get visible(): boolean {
         return this.layoutService.state.configSidebarVisible;

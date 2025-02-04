@@ -1,0 +1,31 @@
+.text-red-500 {
+  color: #f44336; /* Vermelho para mensagens de erro */
+}
+
+.w-6rem {
+  width: 6rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.min-w-screen {
+  min-width: 100vw;
+}
+
+.mb-5 {
+  margin-bottom: 1.25rem;
+}

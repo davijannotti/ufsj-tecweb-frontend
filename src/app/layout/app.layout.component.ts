@@ -4,6 +4,7 @@ import { filter, Subscription } from 'rxjs';
 import { LayoutService } from "./service/app.layout.service";
 import { AppSidebarComponent } from "./app.sidebar.component";
 import { AppTopBarComponent } from './app.topbar.component';
+import { AuthService } from '../service/auth.service';
 
 @Component({
     selector: 'app-layout',
@@ -21,7 +22,7 @@ export class AppLayoutComponent implements OnDestroy {
 
     @ViewChild(AppTopBarComponent) appTopbar!: AppTopBarComponent;
 
-    constructor(public layoutService: LayoutService, public renderer: Renderer2, public router: Router) {
+    constructor(private authService: AuthService, public layoutService: LayoutService, public renderer: Renderer2, public router: Router) {
         this.overlayMenuOpenSubscription = this.layoutService.overlayOpen$.subscribe(() => {
             if (!this.menuOutsideClickListener) {
                 this.menuOutsideClickListener = this.renderer.listen('document', 'click', event => {
@@ -67,6 +68,11 @@ export class AppLayoutComponent implements OnDestroy {
         }
         this.unblockBodyScroll();
     }
+    
+    logout(): void {
+        this.authService.logout();
+        this.router.navigate(['/auth/login']); // Redireciona para o login
+      }
 
     hideProfileMenu() {
         this.layoutService.state.profileSidebarVisible = false;

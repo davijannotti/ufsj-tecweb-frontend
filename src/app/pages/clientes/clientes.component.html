@@ -1,0 +1,64 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-toast></p-toast>
+      <p-toolbar styleClass="mb-4">
+        <div class="p-toolbar-group-start">
+          <button pButton pRipple label="Novo Cliente" icon="pi pi-plus" class="p-button-primary" (click)="abrirDialogo()"></button>
+        </div>
+      </p-toolbar>
+
+      <p-table [value]="clientes" [columns]="cols" dataKey="id" responsiveLayout="scroll" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10, 20, 30]" [showCurrentPageReport]="true" currentPageReportTemplate="Página {first} a {last} de {totalRecords}">
+        <ng-template pTemplate="header">
+          <tr>
+            <th *ngFor="let col of cols">{{ col.header }}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-cliente>
+          <tr>
+            <td>{{ cliente.nome }}</td>
+            <td>{{ cliente.endereco }}</td>
+            <td>{{ cliente.telefone }}</td>
+            <td>
+              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2" (click)="editarCliente(cliente)"></button>
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="confirmarExclusao(cliente)"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+
+  <!-- Dialog de Cadastro/Edição -->
+  <p-dialog header="Novo Cliente" [(visible)]="updateDialog" [modal]="true" [closable]="false" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+      <div class="p-field">
+        <label for="nome">Nome</label>
+        <input id="nome" pInputText [(ngModel)]="novoCliente.nome" placeholder="Nome do cliente" />
+      </div>
+      <div class="p-field">
+        <label for="email">Endereco</label>
+        <input id="email" pInputText [(ngModel)]="novoCliente.endereco" placeholder="Endereco do cliente" />
+      </div>
+      <div class="p-field">
+        <label for="telefone">Telefone</label>
+        <input id="telefone" pInputText [(ngModel)]="novoCliente.telefone" placeholder="Telefone do cliente" />
+      </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="updateDialog = false"></button>
+      <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-success" (click)="salvarCliente()"></button>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Dialog de Confirmação de Exclusão -->
+  <p-dialog header="Confirmar Exclusão" [(visible)]="deleteDialog" [modal]="true" [closable]="false" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+      <p>Você tem certeza que deseja excluir o cliente <strong>{{ clienteSelecionado?.nome }}</strong>?</p>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="deleteDialog = false"></button>
+      <button pButton pRipple label="Excluir" icon="pi pi-check" class="p-button-danger" (click)="excluirCliente()"></button>
+    </ng-template>
+  </p-dialog>
+</div>

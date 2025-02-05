@@ -9,18 +9,18 @@ import { RegisterComponent } from './register.component';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
-  declarations: [RegisterComponent],
-  imports: [
-    CommonModule,
-    FormsModule,
-    InputTextModule,
-    PasswordModule,
-    ButtonModule,
-    RippleModule,
-    RouterModule.forChild([
-      { path: '', component: RegisterComponent } // Define rota para o registro
-    ]),
-  ],
-  exports: [RegisterComponent],
+    declarations: [RegisterComponent],
+    imports: [
+        CommonModule,
+        FormsModule,
+        InputTextModule,
+        PasswordModule,
+        ButtonModule,
+        RippleModule,
+        RouterModule.forChild([
+            { path: '', component: RegisterComponent }, // Define rota para o registro
+        ]),
+    ],
+    exports: [RegisterComponent],
 })
 export class RegisterModule {}

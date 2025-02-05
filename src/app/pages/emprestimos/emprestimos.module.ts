@@ -16,20 +16,20 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 
 @NgModule({
-  declarations: [EmprestimoComponent],
-  imports: [
-    CommonModule,
-    EmprestimoRoutingModule,
-    FormsModule,
-    HttpClientModule,
-    TableModule,
-    ButtonModule,
-    DialogModule,
-    DropdownModule,
-    CalendarModule,
-    InputNumberModule,
-    ToastModule,
-    ToolbarModule,
-  ],
+    declarations: [EmprestimoComponent],
+    imports: [
+        CommonModule,
+        EmprestimoRoutingModule,
+        FormsModule,
+        HttpClientModule,
+        TableModule,
+        ButtonModule,
+        DialogModule,
+        DropdownModule,
+        CalendarModule,
+        InputNumberModule,
+        ToastModule,
+        ToolbarModule,
+    ],
 })
 export class EmprestimoModule {}

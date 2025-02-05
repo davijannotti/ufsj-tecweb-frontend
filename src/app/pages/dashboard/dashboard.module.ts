@@ -26,8 +26,8 @@ import { DashboardsRoutingModule } from './dashboard-routing.module';
         PanelModule,
         CardModule,
         DashboardsRoutingModule,
-        DialogModule
+        DialogModule,
     ],
-    declarations: [DashboardComponent]
+    declarations: [DashboardComponent],
 })
-export class DashboardModule { }
+export class DashboardModule {}

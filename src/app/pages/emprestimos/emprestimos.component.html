@@ -1,137 +1,231 @@
 <div class="grid">
-    <div class="col-12">
-        <div class="card px-6 py-6">
-            <p-toast></p-toast>
-            <p-toolbar styleClass="mb-4">
-                <div class="p-toolbar-group-start">
-                    <div class="my-2">
-                        <button pButton pRipple label="Novo Empréstimo" icon="pi pi-plus" class="p-button-primary mr-2" (click)="abrirDialogo()"></button>
-                    </div>
-                </div>
-            </p-toolbar>
-
-            <p-table [value]="emprestimos" [columns]="cols" dataKey="id" responsiveLayout="scroll" currentPageReportTemplate="Página {first} - {last}" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" [rowHover]="true">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th *ngFor="let col of cols">{{ col.header }}</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-emprestimo>
-                    <tr>
-                        <td>{{ emprestimo.cliente ? getClienteNome(emprestimo.cliente.id) : 'Cliente não atribuído' }}</td>
-                        <td>{{ emprestimo.valor | currency }}</td>
-                        <td>{{ emprestimo.taxa_juros }}%</td>
-                        <td>{{ emprestimo.data_inicio | date: 'dd/MM/yyyy' }}</td>
-                        <td>{{ emprestimo.data_vencimento | date: 'dd/MM/yyyy' }}</td>
-                        <td>
-                            <i *ngIf="emprestimo.status === 'ativo'" class="pi pi-bolt text-green-500"></i>
-                            <i *ngIf="emprestimo.status === 'atrasado'" class="pi pi-clock text-red-500"></i>
-                            <i *ngIf="emprestimo.status === 'pago'" class="pi pi-check-circle text-green-500"></i>
-                            {{ emprestimo.status }}
-                        </td>
-                        <td>
-                            <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2" (click)="editarEmprestimo(emprestimo)"></button>
-                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deletarEmprestimo(emprestimo.id)"></button>
-                                <button *ngIf="emprestimo.status === 'ativo' || emprestimo.status === 'atrasado'" pButton pRipple icon="pi pi-check" class="p-button-rounded p-button-success ml-2" (click)="confirmarPagamento(emprestimo)"></button>
-                            </div>
-                        </td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="paginatorright" let-state>
-                    Empréstimos: {{ state.totalRecords }}
-                </ng-template>
-            </p-table>
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-toast></p-toast>
+      <p-toolbar styleClass="mb-4">
+        <div class="p-toolbar-group-start">
+          <div class="my-2">
+            <button
+              pButton
+              pRipple
+              label="Novo Empréstimo"
+              icon="pi pi-plus"
+              class="p-button-primary mr-2"
+              (click)="abrirDialogo()"
+            ></button>
+          </div>
         </div>
+      </p-toolbar>
 
-        <p-dialog header="Novo Empréstimo"
-                  class="p-fluid"
-                  [(visible)]="updateDialog"
-                  [style]="{ width: '800px' }"
-                  [modal]="true"
-                  [closable]="false"
-                  [resizable]="false"
-                  (onHide)="onHideDialog()">
-            <ng-template pTemplate="content">
-                <div class="grid">
-                    <div class="col-6">
-                        <div class="field">
-                            <label for="cliente">Cliente</label>
-                            <p-dropdown 
-                                id="cliente" 
-                                [(ngModel)]="novoEmprestimo.cliente" 
-                                [options]="clientes" 
-                                optionLabel="nome" 
-                                optionValue="id" 
-                                placeholder="Selecione um cliente">
-                            </p-dropdown>
-                        </div>
-                        <div class="field">
-                            <label for="valor">Valor</label>
-                            <input 
-                                id="valor" 
-                                type="number" 
-                                pInputText 
-                                [(ngModel)]="novoEmprestimo.valor" 
-                                placeholder="">
-                        </div>
-                        <div class="field">
-                            <label for="taxa_juros">Taxa de Juros (%)</label>
-                            <input 
-                                id="taxa_juros" 
-                                type="number" 
-                                pInputText 
-                                [(ngModel)]="novoEmprestimo.taxa_juros" 
-                                placeholder="">
-                        </div>
-                    </div>
-        
-                    <div class="col-6">
-                        <div class="field">
-                            <label for="data_inicio">Data de Início</label>
-                            <p-calendar 
-                                id="data_inicio" 
-                                [(ngModel)]="novoEmprestimo.data_inicio" 
-                                [minDate]="minDate" 
-                                dateFormat="dd/mm/yy" 
-                                placeholder="Data de início">
-                            </p-calendar>
-                        </div>
-                        <div class="field">
-                            <label for="data_vencimento">Data de Vencimento</label>
-                            <p-calendar 
-                                id="data_vencimento" 
-                                [(ngModel)]="novoEmprestimo.data_vencimento" 
-                                [minDate]="minDate" 
-                                dateFormat="dd/mm/yy" 
-                                placeholder="Data de vencimento">
-                            </p-calendar>
-                        </div>
-                    </div>
-                </div>
-            </ng-template>
-        
-            <ng-template pTemplate="footer">
-                <div class="flex justify-end gap-3">
-                    <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="onHideDialog()"></button>
-                    <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-success" (click)="salvarEmprestimo()"></button>
-                </div>
-            </ng-template>
-        </p-dialog>
-        
-        <p-dialog header="Confirmar Exclusão"
-                  [(visible)]="deleteDialog"
-                  [modal]="true"
-                  [closable]="false"
-                  styleClass="p-fluid">
-            <ng-template pTemplate="content">
-                <p>Você tem certeza que deseja excluir este empréstimo?</p>
-            </ng-template>
-            <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Cancelar" (click)="deleteDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-danger" label="Excluir" (click)="onConfirmDelete()"></button>
-            </ng-template>
-        </p-dialog>
-
+      <p-table
+        [value]="emprestimos"
+        [columns]="cols"
+        dataKey="id"
+        responsiveLayout="scroll"
+        currentPageReportTemplate="Página {first} - {last}"
+        [rows]="10"
+        [paginator]="true"
+        [rowsPerPageOptions]="[10, 20, 30]"
+        [showCurrentPageReport]="true"
+        [rowHover]="true"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th *ngFor="let col of cols">{{ col.header }}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-emprestimo>
+          <tr>
+            <td>
+              {{
+                emprestimo.cliente
+                  ? getClienteNome(emprestimo.cliente.id)
+                  : 'Cliente não atribuído'
+              }}
+            </td>
+            <td>{{ emprestimo.valor | currency }}</td>
+            <td>{{ emprestimo.taxa_juros }}%</td>
+            <td>
+              {{ emprestimo.data_inicio | date: 'dd/MM/yyyy' }}
+            </td>
+            <td>
+              {{ emprestimo.data_vencimento | date: 'dd/MM/yyyy' }}
+            </td>
+            <td>
+              <i
+                *ngIf="emprestimo.status === 'ativo'"
+                class="pi pi-bolt text-green-500"
+              ></i>
+              <i
+                *ngIf="emprestimo.status === 'atrasado'"
+                class="pi pi-clock text-red-500"
+              ></i>
+              <i
+                *ngIf="emprestimo.status === 'pago'"
+                class="pi pi-check-circle text-green-500"
+              ></i>
+              {{ emprestimo.status }}
+            </td>
+            <td>
+              <div class="flex">
+                <button
+                  pButton
+                  pRipple
+                  icon="pi pi-pencil"
+                  class="p-button-rounded p-button-warning mr-2"
+                  (click)="editarEmprestimo(emprestimo)"
+                ></button>
+                <button
+                  pButton
+                  pRipple
+                  icon="pi pi-trash"
+                  class="p-button-rounded p-button-danger"
+                  (click)="deletarEmprestimo(emprestimo.id)"
+                ></button>
+                <button
+                  *ngIf="
+                    emprestimo.status === 'ativo' ||
+                    emprestimo.status === 'atrasado'
+                  "
+                  pButton
+                  pRipple
+                  icon="pi pi-check"
+                  class="p-button-rounded p-button-success ml-2"
+                  (click)="confirmarPagamento(emprestimo)"
+                ></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorright" let-state>
+          Empréstimos: {{ state.totalRecords }}
+        </ng-template>
+      </p-table>
     </div>
+
+    <p-dialog
+      header="Novo Empréstimo"
+      class="p-fluid"
+      [(visible)]="updateDialog"
+      [style]="{ width: '800px' }"
+      [modal]="true"
+      [closable]="false"
+      [resizable]="false"
+      (onHide)="onHideDialog()"
+    >
+      <ng-template pTemplate="content">
+        <div class="grid">
+          <div class="col-6">
+            <div class="field">
+              <label for="cliente">Cliente</label>
+              <p-dropdown
+                id="cliente"
+                [(ngModel)]="novoEmprestimo.cliente"
+                [options]="clientes"
+                optionLabel="nome"
+                placeholder="Selecione um cliente"
+              >
+              </p-dropdown>
+            </div>
+            <div class="field">
+              <label for="valor">Valor</label>
+              <input
+                id="valor"
+                type="number"
+                pInputText
+                [(ngModel)]="novoEmprestimo.valor"
+                placeholder=""
+              />
+            </div>
+            <div class="field">
+              <label for="taxa_juros">Taxa de Juros (%)</label>
+              <input
+                id="taxa_juros"
+                type="number"
+                pInputText
+                [(ngModel)]="novoEmprestimo.taxa_juros"
+                placeholder=""
+              />
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="field">
+              <label for="data_inicio">Data de Início</label>
+              <p-calendar
+                id="data_inicio"
+                [(ngModel)]="novoEmprestimo.data_inicio"
+                [minDate]="minDate"
+                dateFormat="dd/mm/yy"
+                placeholder="Data de início"
+              >
+              </p-calendar>
+            </div>
+            <div class="field">
+              <label for="data_vencimento">Data de Vencimento</label>
+              <p-calendar
+                id="data_vencimento"
+                [(ngModel)]="novoEmprestimo.data_vencimento"
+                [minDate]="minDate"
+                dateFormat="dd/mm/yy"
+                placeholder="Data de vencimento"
+              >
+              </p-calendar>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <div class="flex justify-end gap-3">
+          <button
+            pButton
+            pRipple
+            label="Cancelar"
+            icon="pi pi-times"
+            class="p-button-text"
+            (click)="onHideDialog()"
+          ></button>
+          <button
+            pButton
+            pRipple
+            label="Salvar"
+            icon="pi pi-check"
+            class="p-button-success"
+            (click)="salvarEmprestimo()"
+          ></button>
+        </div>
+      </ng-template>
+    </p-dialog>
+
+    <p-dialog
+      header="Confirmar Exclusão"
+      [(visible)]="deleteDialog"
+      [modal]="true"
+      [closable]="false"
+      styleClass="p-fluid"
+    >
+      <ng-template pTemplate="content">
+        <p>Você tem certeza que deseja excluir este empréstimo?</p>
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          icon="pi pi-times"
+          class="p-button-text"
+          label="Cancelar"
+          (click)="deleteDialog = false"
+        ></button>
+        <button
+          pButton
+          pRipple
+          icon="pi pi-check"
+          class="p-button-danger"
+          label="Excluir"
+          (click)="onConfirmDelete()"
+        ></button>
+      </ng-template>
+    </p-dialog>
+  </div>
 </div>

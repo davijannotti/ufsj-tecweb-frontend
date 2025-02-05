@@ -34,8 +34,8 @@ import { DialogModule } from 'primeng/dialog';
         DropdownModule,
         RadioButtonModule,
         InputNumberModule,
-        DialogModule
+        DialogModule,
     ],
-    declarations: [CrudComponent]
+    declarations: [CrudComponent],
 })
-export class CrudModule { }
+export class CrudModule {}

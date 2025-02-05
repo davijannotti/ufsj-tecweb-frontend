@@ -128,8 +128,8 @@ export class LayoutService {
                 el == this._config.theme
                     ? (el = config.theme)
                     : el == `theme-${this._config.colorScheme}`
-                    ? (el = `theme-${config.colorScheme}`)
-                    : el
+                      ? (el = `theme-${config.colorScheme}`)
+                      : el,
             )
             .join('/');
 
@@ -145,7 +145,7 @@ export class LayoutService {
 
         themeLink.parentNode!.insertBefore(
             cloneLinkElement,
-            themeLink.nextSibling
+            themeLink.nextSibling,
         );
         cloneLinkElement.addEventListener('load', () => {
             themeLink.remove();

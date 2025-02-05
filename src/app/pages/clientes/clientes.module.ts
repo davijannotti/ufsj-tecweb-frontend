@@ -14,18 +14,18 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 
 @NgModule({
-  declarations: [ClientesComponent],
-  imports: [
-    CommonModule,
-    TableModule,
-    PaginatorModule,
-    ButtonModule,
-    TooltipModule,
-    DialogModule,
-    CardModule,
-    ClientesRoutingModule,
-    ToastModule,
-    ToolbarModule
-  ],
+    declarations: [ClientesComponent],
+    imports: [
+        CommonModule,
+        TableModule,
+        PaginatorModule,
+        ButtonModule,
+        TooltipModule,
+        DialogModule,
+        CardModule,
+        ClientesRoutingModule,
+        ToastModule,
+        ToolbarModule,
+    ],
 })
 export class ClientesModule {}
